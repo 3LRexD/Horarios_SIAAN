@@ -3,28 +3,73 @@ package com.SIAAN.horarios.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "materia")
+@Table(name = "materias")
 public class Materia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_materia")
+    private Long idMateria;
 
-    @Column(nullable = false)
     private String nombre;
+    private String sigla;
 
-    @Column(name = "codigo_materia")
-    private String codigo;
+    @Column(name = "creditos_academicos", nullable = false)
+    private int creditosAcademicos;
 
-    // constructor vacío
-    public Materia() {}
 
-    // getters y setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @ManyToOne
+    @JoinColumn(name = "id_tipo", nullable = false)
+    private Tipo tipo;
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public Materia() {
+    }
 
-    public String getCodigo() { return codigo; }
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public Materia(Long idMateria, String nombre, String sigla, int creditosAcademicos, Tipo tipo) {
+        this.idMateria = idMateria;
+        this.nombre = nombre;
+        this.sigla = sigla;
+        this.creditosAcademicos = creditosAcademicos;
+        this.tipo = tipo;
+    }
+   // getters y setters
+    public Long getIdMateria() {
+        return idMateria;
+    }
+
+    public void setIdMateria(Long idMateria) {
+        this.idMateria = idMateria;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
+    }
+
+    public int getCreditosAcademicos() {
+        return creditosAcademicos;
+    }
+
+    public void setCreditosAcademicos(int creditosAcademicos) {
+        this.creditosAcademicos = creditosAcademicos;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 }

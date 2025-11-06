@@ -1,9 +1,11 @@
 package com.SIAAN.horarios.controller;
 
+
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/horarios")
-public class HorarioController {
+@RequestMapping("/materias")
+public class MateriaController {
+    
 }
