@@ -10,8 +10,8 @@ public class Paralelo {
     @Column(name = "id_paralelo")
     private Long idParalelo;
 
-    @Column(name = "num_paralelo", nullable = false)
-    private int numParalelo;
+    @Column(name = "num_paralelo")
+    private String numParalelo;
 
     @ManyToOne
     @JoinColumn(name = "id_materia", referencedColumnName = "id_materia", nullable = false)
@@ -25,11 +25,11 @@ public class Paralelo {
     public Paralelo() {
     }
 
-    
-    public Paralelo(int numParalelo, Materia materia, Docente docente, Aula aula) {
+
+    public Paralelo(String numParalelo, Materia materia, Docente docente) {
         this.numParalelo = numParalelo;
         this.materia = materia;
-        this.docente = docente;
+        this.docente = docente; 
     }
 
     // getters y setters
@@ -41,11 +41,11 @@ public class Paralelo {
         this.idParalelo = idParalelo;
     }
 
-    public int getNumParalelo() {
+    public String getNumParalelo() {
         return numParalelo;
     }
 
-    public void setNumParalelo(int numParalelo) {
+    public void setNumParalelo(String numParalelo) {
         this.numParalelo = numParalelo;
     }
 

@@ -3,7 +3,7 @@ package com.SIAAN.horarios.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "aula")
+@Table(name = "aulas")
 public class Aula {
 
     @Id
