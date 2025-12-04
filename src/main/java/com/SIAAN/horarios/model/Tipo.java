@@ -1,5 +1,7 @@
 package com.SIAAN.horarios.model;
+
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore; 
 import java.util.List;
 
 @Entity
@@ -14,11 +16,11 @@ public class Tipo {
     @Column(name = "nombre", nullable = false, length = 30)
     private String nombre;
 
-    // Relación con MATERIAS → un tipo puede tener muchas materias
+   
     @OneToMany(mappedBy = "tipo")
+    @JsonIgnore 
     private List<Materia> materias;
 
-   
     public Tipo() {
     }
 
@@ -52,6 +54,3 @@ public class Tipo {
         this.materias = materias;
     }
 }
-
-
-

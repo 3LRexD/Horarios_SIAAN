@@ -32,7 +32,24 @@ public class Materia {
         this.creditosAcademicos = creditosAcademicos;
         this.tipo = tipo;
     }
-   // getters y setters
+
+    @OneToMany(mappedBy = "materia", fetch = FetchType.EAGER)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private java.util.List<Paralelo> paralelos;
+
+
+    
+    
+    // getters y setters
+    
+    public java.util.List<Paralelo> getParalelos() {
+        return paralelos;
+    }
+
+    public void setParalelos(java.util.List<Paralelo> paralelos) {
+        this.paralelos = paralelos;
+    }
+
     public Long getIdMateria() {
         return idMateria;
     }

@@ -30,7 +30,7 @@ public class Horario {
     @JoinColumn(name = "id_aula", referencedColumnName = "id_aula", nullable = false)
     private Aula aula;
 
-    public Horario() {
+    public Horario() {  
     }
 
     public Horario(LocalTime horaInicio, LocalTime horaFin, Paralelo paralelo, DiaSemana diaSemana, Aula aula) {

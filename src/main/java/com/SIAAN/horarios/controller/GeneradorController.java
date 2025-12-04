@@ -1,37 +1,90 @@
 package com.SIAAN.horarios.controller;
 
+import com.SIAAN.horarios.model.Paralelo;
 import com.SIAAN.horarios.service.GeneradorHorariosService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.stream.Collectors;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+
 
 @RestController
 @RequestMapping("/api/generador")
+@CrossOrigin(origins = "*") // Permite que el frontend (React/Angular) se conecte sin problemas
 public class GeneradorController {
 
-    @Autowired
-    private GeneradorHorariosService generador;
+    private final GeneradorHorariosService generadorService;
 
-    // [30, 23, 5, 6]postman prueba de sis info, tecweb, dbb2, estructura
-    @PostMapping("/generar-dias-horas")
-    public ResponseEntity<?> generarPorDiasHoras(@RequestBody List<Long> materiaIds) {
-        return generador.generarHorarioPorDiasYHoras(materiaIds)
-            .<ResponseEntity<?>>map(sol -> {
-                List<Map<String, Object>> resp = sol.stream().map(p -> {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("idParalelo", p.getIdParalelo());
-                    data.put("numParalelo", p.getNumParalelo());
-                    data.put("idMateria", p.getMateria() != null ? p.getMateria().getIdMateria() : null);
-                    return data;
-                }).collect(Collectors.toList());
-                return ResponseEntity.ok(resp);
-            })
-            .orElseGet(() -> ResponseEntity.status(404).body("No se encontró solución"));
+    public GeneradorController(GeneradorHorariosService generadorService) {
+        this.generadorService = generadorService;
+    }
 
+    @PostMapping("/generar")
+    public ResponseEntity<?> generarHorarios(@RequestBody List<Long> idsMaterias) {
+        try {
+            
+            List<List<Paralelo>> opciones = generadorService.generarOpciones(idsMaterias);
+
+            if (opciones.isEmpty()) {
+                return ResponseEntity.ok(Map.of(
+                    "mensaje", "no hay combinaciones validas :C",
+                    "total_opciones", 0
+                ));
+            }
+
+            //salida pal postman
+            return ResponseEntity.ok(Map.of(
+                "mensaje", "Horarios generados exitosamente.",
+                "total_opciones", opciones.size(),
+                "data", opciones 
+            ));
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
+    }
+   
+
+    // metodo antiguo
+
+    /*@PostMapping("/exportar-excel")
+    public ResponseEntity<InputStreamResource> exportarExcel(@RequestBody List<Long> idsMaterias) {
+        
+        List<List<Paralelo>> opciones = generadorService.generarOpciones(idsMaterias);
+
+       
+        java.io.ByteArrayInputStream in = ExcelExporter.horariosToExcel(opciones);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=horarios_generados.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(new InputStreamResource(in));
+    }*/
+   @PostMapping("/exportar-excel")
+    public ResponseEntity<InputStreamResource> exportarExcel(@RequestBody List<Long> idsMaterias) {
+        // genera opcinoes
+        List<List<Paralelo>> opciones = generadorService.generarOpciones(idsMaterias);
+        // expoortamos
+        java.io.ByteArrayInputStream in = com.SIAAN.horarios.export.ExcelVisualExporter.generarExcelVisual(opciones);
+        //respuesta
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=horarios_visuales.xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(new InputStreamResource(in));
     }
 }

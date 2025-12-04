@@ -13,3 +13,4 @@ public interface ParaleloRepository extends JpaRepository<Paralelo, Long> {
 
     List<Paralelo> findByMateria_IdMateria(Long idMateria);
 }
+    

@@ -1,4 +1,6 @@
 package com.SIAAN.horarios.model;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,7 +23,10 @@ public class Paralelo {
     @JoinColumn(name = "id_docente", referencedColumnName = "id_docente", nullable = false)
     private Docente docente;
 
-    
+    @OneToMany(mappedBy = "paralelo", fetch = FetchType.EAGER)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private java.util.List<Horario> listaHorarios;
+
     public Paralelo() {
     }
 
@@ -33,6 +38,14 @@ public class Paralelo {
     }
 
     // getters y setters
+    public List<Horario> getListaHorarios() {
+        return listaHorarios;
+    }
+
+    public void setListaHorarios(List<Horario> listaHorarios) {
+        this.listaHorarios = listaHorarios;
+    }
+
     public Long getIdParalelo() {
         return idParalelo;
     }

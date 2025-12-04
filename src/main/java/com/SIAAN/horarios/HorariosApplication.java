@@ -15,7 +15,7 @@ public class HorariosApplication {
         SpringApplication.run(HorariosApplication.class, args);
     }
 
-    // prueba rápida de conexión
+    // prueba rápida de conexion
     @Bean
     CommandLineRunner testConnection() {
         return args -> {

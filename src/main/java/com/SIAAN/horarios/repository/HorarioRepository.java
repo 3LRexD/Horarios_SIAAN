@@ -10,10 +10,8 @@ import java.util.List;
 @Repository
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
 
-    // opción 1 (funciona con el nombre del atributo)
     List<Horario> findByParalelo_IdParalelo(Long idParalelo);
 
-    // opción 2 (query explícita, útil si el IDE marca error)
     @Query("SELECT h FROM Horario h WHERE h.paralelo.idParalelo = :idParalelo")
     List<Horario> buscarPorParalelo(@Param("idParalelo") Long idParalelo);
 }
