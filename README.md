@@ -56,3 +56,26 @@ Navega a la carpeta del servidor:
 
 ```bash
 cd backend
+```
+# Arquitectura del Sistema
+Este sistema utiliza una arquitectura Cliente-Servidor separada: 
+```bash
++---------------+          +--------------------------+          +------------------+
+|   ESTUDIANTE  | -------> |    FRONTEND (Vue.js)     | -------> | API REST (Spring)|
++---------------+          | - Selección de Materias  |  HTTPS   | - Controladores  |
+                           | - Visualización Horarios | <------- | - Seguridad      |
+                           +--------------------------+          +--------+---------+
+                                                                          |
+                                                                          v
++------------------+          +-------------------------+        +--------+---------+
+|  SALIDA DOCS     | <------- |   LÓGICA DE NEGOCIO     | <----- |  BASE DE DATOS   |
+| - Excel (.xlsx)  |          | - HorarioGeneratorEngine|        | - Materias       |
+| - PDF (.pdf)     |          | - ScheduleMatrix        |        | - Paralelos      |
++------------------+          +-------------------------+        | - Horarios       |
+                                                                 +------------------+
+```
+**Componentes:**
+* **Frontend:** Desarrollado en Vue.js, se encarga de la interacción con el estudiante.
+* **Backend:** Desarrollado en Java (Spring Boot), maneja la lógica de negocio.
+* **Motor Algorítmico:** Un componente dedicado (`HorarioGeneratorEngine`) que utiliza recursividad y backtracking para calcular las combinaciones sin choques y las 
+va almacenando en (`ScheduleMatrix`) hasta llgar al numero maximo de combinaciones .
